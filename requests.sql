@@ -36,6 +36,40 @@ ON Social_network.network_id = Post_cust.network_id
 GROUP BY Social_network.network_id
 HAVING COUNT(Post_cust.customer_id) >= 1;
 
+-- 8.	знайти усi спiльнi подiї для автора A та покупця С за вказаний перiод (з дати F по дату T);
+-- Події
+-- покупець замовляє у автора повiдомлення деякого стилю у соцiальнiй мережi;
+-- покупець надає автору доступ до свого облiкогово запису у соцiальнiй мережi;
+-- покупець позбавляє автора доступу до свого облiкогово запису у соцiальнiй мережi;
+-- покупець замовляє у групи авторiв статтю у соцiальнiй мережi;                       X - not specific to author A and customer C?
+-- автор проводить одноденну акцiю 50% знижок;                                         X - not specific to author A and customer C
+-- автор проводить тижневу акцiю 50% знижок на повiдомленя деякого стилю;              X - not specific to author A and customer C
+
+PREPARE getEvents (int, int, date, date) AS
+SELECT
+(
+	SELECT CONCAT(post_id) FROM Post
+	WHERE customer_id = $1 AND author_id = $2
+	AND date between
+	$3::date AND $4::date
+) as posts_ids,
+(
+SELECT 
+	CONCAT(token_id) FROM Access_token
+	WHERE customer_id = $1 AND author_id = $2
+	AND given > $3::date
+) as tokens_given,
+(
+SELECT 
+	CONCAT(token_id) FROM Access_token
+	WHERE customer_id = $1 AND author_id = $2
+	AND NOT status AND terminated < $4::date
+) as tokens_terminated;
+
+EXECUTE getEvents(10, 7, '2000-05-09', '2021-09-10');
+deallocate getEvents;
+
+
 --11
 SELECT COUNT(*), DATE_TRUNC('month', date) AS  month 
 FROM Post
