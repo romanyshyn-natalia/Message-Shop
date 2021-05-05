@@ -69,6 +69,28 @@ SELECT
 EXECUTE getEvents(10, 7, '2000-05-09', '2021-09-10');
 deallocate getEvents;
 
+-- 10.	для покупця С та кожного стилю, у якому вiн замовляв повiдомлення, знайти скiльки замовлень за вказаний перiод
+-- (з дати F по дату T) отримали 50% знижку;
+
+PREPARE getDiscountedPosts (int, date, date) AS
+
+SELECT W.style_id as style_id, W.count+D.count as count FROM
+(SELECT style_id, count(style_id)
+			FROM Post INNER JOIN PromosWeek
+			ON Post.date between PromosWeek.start_date and PromosWeek.start_date + '7 days'::interval
+			WHERE customer_id = $1 AND
+			date between $2 and $3
+			GROUP BY style_id) as W
+JOIN
+(SELECT style_id, count(style_id)
+			FROM Post INNER JOIN PromosWeek
+			ON Post.date = PromosWeek.start_date
+			WHERE customer_id = $1 AND
+			date between $2 and $3
+			GROUP BY style_id) as D
+ON W.style_id=D.style_id;
+EXECUTE getDiscountedPosts(1, '2000-05-09', '2021-09-10');
+deallocate getDiscountedPosts;
 
 --11
 SELECT COUNT(*), DATE_TRUNC('month', date) AS  month 
