@@ -36,6 +36,13 @@ ON Social_network.network_id = Post_cust.network_id
 GROUP BY Social_network.network_id
 HAVING COUNT(Post_cust.customer_id) >= 1;
 
+-- 6.	для автора А знайти усi облiковi записи у соцiальних мережах, до яких вiн мав доступ протягом вказаного перiоду (з дати F по дату T);
+SELECT customer_id FROM
+Access_token WHERE author_id=9 AND Access_token.status=true
+OR Access_token.given between '2019-08-11'::date and '2019-09-07';
+
+
+
 -- 8.	знайти усi спiльнi подiї для автора A та покупця С за вказаний перiод (з дати F по дату T);
 -- Події
 -- покупець замовляє у автора повiдомлення деякого стилю у соцiальнiй мережi;
