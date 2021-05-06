@@ -38,7 +38,10 @@ HAVING COUNT(Post_cust.customer_id) >= 1;
 
 -- 6.	для автора А знайти усi облiковi записи у соцiальних мережах, до яких вiн мав доступ протягом вказаного перiоду (з дати F по дату T);
 SELECT customer_id FROM
-Access_token WHERE author_id=9 AND Access_token.status=true
+Access_token INNER JOIN
+(SELECT author_id from Author WHERE name='Scott') as A
+ON A.author_id=Access_token.author_id
+AND Access_token.status=true
 OR Access_token.given between '2019-08-11'::date and '2019-09-07';
 
 -- 7.	для покупця С знайти усiх авторiв, яким вiн надав доступ до хоча б одного облiкового запису у соцiальнiй мережi, а потiм позбавив його цього доступу;
