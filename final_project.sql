@@ -56,7 +56,9 @@ CREATE TABLE IF NOT EXISTS Access_token (
 		REFERENCES Customer(customer_id)
 		ON DELETE CASCADE,
     author_id INTEGER NOT NULL,
-    status BOOLEAN DEFAULT FALSE
+    status BOOLEAN DEFAULT FALSE,
+	given DATE NOT NULL DEFAULT CURRENT_DATE,
+	terminated DATE DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS PromosDay (
@@ -145,12 +147,15 @@ VALUES
 	(4, 7, 2, CURRENT_DATE, 'Python is awesome', 2),
 	(7, 4, 3, CURRENT_DATE, 'C++ is awesome', 5),
 	(2, 4, 4, '2020-09-28', 'C is awesome', 5),
+	(2, 4, 1, '2020-09-25', 'C is really awesome', 1),
+	(3, 4, 1, '2020-09-22', 'C is really awesome', 9),
 	(8, 8, 4, '2020-08-14', 'JS is awesome', 5),
 	(4, 8, 4, '2019-07-22', 'Java is awesome', 1),
 	(3, 1, 7, '2019-06-06', 'Rust is awesome', 9),
 	(2, 1, 8, '2018-05-30', 'PHP is not awesome', 7),
 	(1, 4, 5, '2018-04-02', 'Assembly is awesome', 7),
-	(1, 9, 9, '2017-03-15', 'Verilog is awesome', 2);
+	(1, 9, 9, '2017-03-15', 'Verilog is awesome', 2),
+	(1, 7, 10, '2019-03-15', 'Hello message!', 2);
 	
 INSERT INTO Article(customer_id, author_group_id, network_id, header, text)
 VALUES
@@ -198,18 +203,24 @@ VALUES
 	 chequerboard patchwork dresses utilised archive rolls of fabrics from previous collections,
 	 while at Chanel, crisp layering semaphored a new mood of restraint.');
 	 
-INSERT INTO Access_token (customer_id, author_id)
+INSERT INTO Access_token (customer_id, author_id, given, status)
 VALUES 
-	(1, 4),
-	(4, 2),
-	(3, 6),
-	(2, 1),
-	(5, 9),
-	(9, 8),
-	(10, 7),
-	(8, 3),
-	(6, 5),
-	(7, 10);
+	(1, 4, '2002-09-10', true),
+	(4, 2, '2010-11-09', true),
+	(3, 6, '2020-03-30', true),
+	(2, 1, '2016-07-11', true),
+	(5, 9, '2019-10-10', true),
+	(2, 9, '2019-10-07', true),
+	(1, 9, '2019-11-09', true);
+
+INSERT INTO Access_token (customer_id, author_id, given, terminated)
+VALUES 
+	(9, 8, '2010-07-10', '2010-07-11'),
+	(10, 7, '2020-10-09', '2010-11-02'),
+	(8, 3, '2002-01-02', '2019-06-07'),
+	(6, 5, '2016-09-03', '2016-09-02'),
+	(7, 10, '2020-09-10', '2020-09-15'),
+	(7, 9, '2019-08-10', '2019-09-05');
 
 INSERT INTO PromosDay(start_date, author_id) VALUES
 	('2018-05-19', 5),
@@ -234,7 +245,6 @@ INSERT INTO PromosWeek(start_date, author_id) VALUES
 	('2021-06-19', 8),
 	('2021-06-28', 2),
 	('2020-07-12', 5);
-
 
 CREATE INDEX author_id_index ON Author(author_id);
 CREATE INDEX customer_id_index ON Customer(customer_id);
