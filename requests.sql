@@ -1,3 +1,14 @@
+--1
+SELECT Customer.name FROM Customer
+  JOIN POST
+  ON Customer.customer_id = POST.customer_id
+  JOIN Author
+  ON POST.author_id = Author.author_id
+  WHERE Author.name = 'Pol' AND
+ 	date between '2018-04-01'::date AND ('2020-05-30'::date + '1 day'::interval)
+  GROUP BY Customer.customer_id
+  HAVING COUNT(Customer.customer_id) >= 1; -- N = 1
+
 --3
 SELECT Author.name, COUNT(DISTINCT Post_cust.customer_id) AS number_of_distinct_customers
 FROM (
