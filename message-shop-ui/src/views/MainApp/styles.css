@@ -134,3 +134,30 @@ a {
     align-self: flex-end;
     margin-right: 20%;
 }
+
+.ResultTable {
+    width: 100%;
+}
+
+.ResultTable > table  {
+    border-radius: 5px;
+    font-size: 1.5em;
+    font-weight: normal;
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    white-space: nowrap;
+    background-color: rgba(255, 255, 255, 0.459);
+}
+
+.ResultTable > table > thead  {
+    background-color: rgba(177, 177, 177, 0.459);
+}
+
+.ResultTable > table > thead > tr > td  {
+    padding: 1em;
+}
+.ResultTable > table > tbody > tr > td  {
+    padding: 1em;
+}

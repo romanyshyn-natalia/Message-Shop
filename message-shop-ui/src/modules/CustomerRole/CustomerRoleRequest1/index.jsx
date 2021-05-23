@@ -30,7 +30,7 @@ const SocialMediaRoleRequest1 = () => {
                 <div className="FormContainer">
                     <form>
                         <div className="FormRow">
-                            <span>Author:</span>
+                            <span>Customer:</span>
                             <input type="text"/>
                         </div>
                         <div className="FormRow">
