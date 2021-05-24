@@ -33,9 +33,11 @@ CREATE TABLE IF NOT EXISTS Post (
 		REFERENCES Author(author_id)
 		ON DELETE CASCADE,
 	customer_id INTEGER NOT NULL,
+	network_id INTEGER NOT NULL,
+	description VARCHAR(1000) NOT NULL,
+	text VARCHAR(1000),
 	date DATE NOT NULL DEFAULT CURRENT_DATE,
-	text VARCHAR(1000) NOT NULL,
-	network_id INTEGER NOT NULL
+	update DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE IF NOT EXISTS Article (
@@ -46,8 +48,10 @@ CREATE TABLE IF NOT EXISTS Article (
 	  ON DELETE CASCADE,
     network_id INTEGER NOT NULL,
 	header VARCHAR(100) NOT NULL,
-	text VARCHAR(10000) NOT NULL,
-	date DATE NOT NULL DEFAULT CURRENT_DATE
+	description VARCHAR(10000) NOT NULL,
+	text VARCHAR(10000),
+	date DATE NOT NULL DEFAULT CURRENT_DATE,
+	update DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE IF NOT EXISTS Access_token (
@@ -141,67 +145,68 @@ INSERT INTO PostStyles(style_name) VALUES
 	('Memoris'),
 	('Scripts');
 
-INSERT INTO Post(style_id, author_id, customer_id, date, text, network_id)
+INSERT INTO Post(style_id, author_id, customer_id, network_id, description, text, date, update)
 VALUES
-	(7, 5, 1, CURRENT_DATE, 'Hello world', 3),
-	(4, 7, 2, CURRENT_DATE, 'Python is awesome', 2),
-	(7, 4, 3, CURRENT_DATE, 'C++ is awesome', 5),
-	(2, 4, 4, '2020-09-28', 'C is awesome', 5),
-	(2, 4, 1, '2020-09-25', 'C is really awesome', 1),
-	(3, 4, 1, '2020-09-22', 'C is really awesome', 9),
-	(8, 8, 4, '2020-08-14', 'JS is awesome', 5),
-	(4, 8, 4, '2019-07-22', 'Java is awesome', 1),
-	(3, 1, 7, '2019-06-06', 'Rust is awesome', 9),
-	(2, 1, 8, '2018-05-30', 'PHP is not awesome', 7),
-	(1, 4, 5, '2018-04-02', 'Assembly is awesome', 7),
-	(1, 9, 9, '2017-03-15', 'Verilog is awesome', 2),
-	(1, 7, 10, '2019-03-15', 'Hello message!', 2);
+	(7, 5, 1, 3, 'Just usual greeting', 'Good morning everybody', '2021-05-20', CURRENT_DATE),
+	(4, 7, 2, 2, 'Some fictional story about animals. It should not be very big.', 'Tired of the bragging of a speedy hare, a tortoise challenges it to a race. 
+	 The overconfident hare accepts the competition and runs as fast as it can after the race begins.', '2021-02-11', '2021-03-03'),
+	(7, 4, 3, 5, 'Some facts about programming language C', NULL, CURRENT_DATE, NULL),
+	(2, 4, 4, 5, 'Some facts about programming language Python', NULL, CURRENT_DATE, NULL),
+	(2, 4, 1, 1, 'Few sentences about coronavirus nowadays', 'Coronavirus disease (COVID-19) is an infectious disease caused by a newly
+	 discovered coronavirus. Most people infected with the COVID-19 virus will experience mild to moderate
+	 respiratory illness and recover without requiring special treatment.', '2020-09-25', '2020-10-25'),
+	(3, 4, 1, 9, 'Few sentences about my product - recognition application. Its advantages.', 'To increase corporate culture in your company and
+	 give an employee feeling that he is part of the company you can use our solution. An application Bonusly will allow you to send gratitudes together with virtual
+	 coins to your colleagues for their good job', '2019-02-01', '2019-04-03'),
+	(8, 8, 4, 5, 'Interesting facts about animals in the Carpathians', NULL, '2018-02-26', NULL),
+	(4, 8, 4, 1, 'Some story about liitle friends in the forest. About their adventures', NULL, '2017-03-15', NULL),
+	(3, 1, 7, 9, 'Few sentences about our school', 'Evshan school is a great opportunity for your kids to gain skills in
+	 computer science', '2018-05-10', '2018-05-30'),
+	(2, 1, 8, 7, 'Some words about PHP', 'PHP is not awesome', '2018-04-30', '2018-05-30'),
+	(1, 4, 5, 7, 'Some words about Assembly', 'Assembly is awesome', '2018-03-31', '2018-04-02'),
+	(1, 9, 9, 2, 'Some facts about Verilog', NULL, '2017-03-15', NULL),
+	(1, 7, 10, 2, 'Few sentences about our product', NULL, '2018-05-19', NULL);
 	
-INSERT INTO Article(customer_id, author_group_id, network_id, header, text)
+INSERT INTO Article(customer_id, author_group_id, network_id, header, description, text, date, update)
 VALUES
-	(1, 4, 2, 'Coronavirus', 'Coronavirus disease (COVID-19) is an infectious disease caused by a newly
+	(1, 4, 2, 'Coronavirus', 'Some interesting and important facts about coronavirus', 'Coronavirus disease (COVID-19) is an infectious disease caused by a newly
 	 discovered coronavirus. Most people infected with the COVID-19 virus will experience mild to moderate
 	 respiratory illness and recover without requiring special treatment. Older people, and those with
 	 underlying medical problems like cardiovascular disease, diabetes, chronic respiratory disease, and
-	 cancer are more likely to develop serious illness.'),
-	(5, 5, 1, 'What Is Mental Health?', 'Mental health includes our emotional, psychological, and social
+	 cancer are more likely to develop serious illness.', '2019-11-12', '2019-12-22'),
+	(5, 5, 1, 'What Is Mental Health?', 'Some interesting and important facts about mental health', 'Mental health includes our emotional, psychological, and social
 	 well-being. It affects how we think, feel, and act. It also helps determine how we handle stress,
 	 relate to others, and make choices. Mental health is important at every stage of life, from childhood
-	 and adolescence through adulthood.'),
-	(10, 1, 2, 'Why Sport Matters?', 'One of the best reasons for kids and adults to play sport is for the
+	 and adolescence through adulthood.', '2018-09-10', '2018-11-13'),
+	(10, 1, 2, 'Why Sport Matters?', 'Articel about sport and its importance', 'One of the best reasons for kids and adults to play sport is for the
 	 incredible health benefits. With experts recommending 150 minutes of moderate exercise a week, it can
 	 be hard to find the time and motivation to fit this into a busy schedule. Sport makes it easy. Firstly,
 	 the sport tends to involve vigorous exercise, meaning you only need to aim for 75 minutes a week to
-	 get the same benefits. This makes achieving a healthy level of exercise easier.'),
-	(2, 5, 6, 'What Is True Love?', 'An indicator of true love is that you understand and accept your partner
+	 get the same benefits. This makes achieving a healthy level of exercise easier.', '2020-06-11', '2019-08-11'),
+	(2, 5, 6, 'What Is True Love?', 'Article about love and indicators that show your feelings', 'An indicator of true love is that you understand and accept your partner
 	 for the person who he or she truly is. You’re not trying to change your mate, fix him or her and/or turn
 	 him or her into a different person. Rather, you fully accept, appreciate and adore your partner, flaws
-	 and all.'),
-	(3, 3, 3, 'TRENDS IN THE IT SPHERE TODAY', 'We have seen everything from mobile phones to watches, LED
+	 and all.', '2019-01-08', '2019-03-02'),
+	(3, 3, 3, 'TRENDS IN THE IT SPHERE TODAY', 'Article about IT sphere nowadays', 'We have seen everything from mobile phones to watches, LED
 	 TVs to security cameras turning smart in the last decade. In the next decade, we will see the entire
 	 cities turning into smart cities.Technologies of IoT (Internet of Things) together with AI
 	 (Artificial Intelligence) and Blockchain will power the economies of the smart cities. The citizens
 	 of these cities will have seamless experience related to work, businesses, investments, shopping,
-	 travel, and everything we can imagine. '),
-    (9, 1, 8, 'Mobile Technology', 'People spend a considerable amount of time looking at their smartphone
+	 travel, and everything we can imagine.', '2020-05-22', '2020-07-10'),
+    (9, 1, 8, 'Mobile Technology', 'Article about mobile technologies nowadays', 'People spend a considerable amount of time looking at their smartphone
 	 screens, checking notifications, socializing, checking emails, playing games, shopping and much more
 	 on their mobile phones every day. Mobile phones have become an integral part of our lives and software
 	 companies use the mobile devices to collect consumer data, health data, and data related to different
-	 services.'),
-	(9, 6, 6, 'Albania', 'Albania, country in southern Europe, located in the western part of the Balkan
-	 Peninsula on the Strait of Otranto, the southern entrance to the Adriatic Sea. The capital city is
-	 Tirana (Tiranë).'),
-	(8, 4, 10, 'Elephants', 'Elephants are the largest land mammals on earth and have distinctly massive
+	 services.', '2018-03-29', '2018-05-16'),
+	(9, 6, 6, 'Albania', 'Interesting facts about Albania, its nature and culture.', NULL, '2021-04-11', NULL),
+	(8, 4, 10, 'Elephants', 'Article about interesting facts about Elephants', 'Elephants are the largest land mammals on earth and have distinctly massive
 	 bodies, large ears, and long trunks. They use their trunks to pick up objects, trumpet warnings,
-	 greet other elephants, or suck up water for drinking or bathing, among other uses.'),
-	(4, 2, 1, 'Tips to beat insomnia', 'Going to bed and getting up at roughly the same time every day
-	 will programme your body to sleep better. Choose a time when you are likely to feel tired and sleepy.
-	 Your bedroom should be a peaceful place for rest and sleep. Temperature, lighting and noise should be
-	 controlled so that your bedroom environment helps you to fall (and stay) asleep.'),
-	(7, 7, 2, 'Summer 2021 Trends', 'In a world with no simple answers or even straightforward questions,
+	 greet other elephants, or suck up water for drinking or bathing, among other uses.', '2019-03-09', '2019-05-07'),
+	(4, 2, 1, 'Tips to beat insomnia', 'Article about insomnia and how to beat it.', NULL, '2017-01-30', NULL),
+	(7, 7, 2, 'Summer 2021 Trends', 'Text about Summer 2021 Trends', 'In a world with no simple answers or even straightforward questions,
 	 designers showed a predilection for black and white – most often, together. At Dolce & Gabbana,
 	 chequerboard patchwork dresses utilised archive rolls of fabrics from previous collections,
-	 while at Chanel, crisp layering semaphored a new mood of restraint.');
+	 while at Chanel, crisp layering semaphored a new mood of restraint.', '2021-03-11', '2021-04-20');
 	 
 INSERT INTO Access_token (customer_id, author_id, given, status)
 VALUES 
