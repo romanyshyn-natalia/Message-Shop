@@ -9,6 +9,26 @@ SELECT Customer.name FROM Customer
   GROUP BY Customer.customer_id
   HAVING COUNT(Customer.customer_id) >= 1; -- N = 1
 
+--2
+SELECT DISTINCT name FROM (
+SELECT Author.name
+  FROM Post
+  JOIN Author
+    ON Post.author_id = Author.author_id
+  JOIN Customer
+    ON Post.customer_id = Customer.customer_id
+  WHERE Customer.name = 'Anya' AND date between '2018-03-01'::date AND ('2021-05-30'::date + '1 day'::interval)
+UNION
+SELECT Author.name
+  FROM Article
+  JOIN Customer
+    ON Article.customer_id = Customer.customer_id
+  JOIN AuthorGroup
+    ON Article.author_group_id = AuthorGroup.author_group_id
+  JOIN Author
+    ON Author.author_group_id = AuthorGroup.author_group_id
+  WHERE Customer.name = 'Pavlo' AND date between '2018-03-01'::date AND ('2021-05-30'::date + '1 day'::interval)) AS Auth;
+
 --3
 SELECT Author.name, COUNT(DISTINCT Post_cust.customer_id) AS number_of_distinct_customers
 FROM (
