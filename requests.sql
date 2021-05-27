@@ -152,3 +152,16 @@ deallocate getDiscountedPosts;
 SELECT COUNT(*), DATE_TRUNC('month', date) AS  month 
 FROM Post
 GROUP BY DATE_TRUNC('month', date);
+
+--12
+SELECT Social_network.name
+  FROM Post
+  JOIN PostStyles
+    ON Post.style_id = PostStyles.style_id
+  JOIN Author
+    ON Post.author_id = Author.author_id
+  JOIN Social_network
+    ON Post.network_id = Social_network.network_id
+  WHERE Author.name = 'Pol' AND date between '2018-03-01'::date AND ('2021-05-30'::date + '1 day'::interval)
+  GROUP BY Social_network.name
+  ORDER BY COUNT(Post.style_id) DESC;
