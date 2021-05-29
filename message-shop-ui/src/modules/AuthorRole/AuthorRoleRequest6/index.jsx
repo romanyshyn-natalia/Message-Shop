@@ -1,27 +1,21 @@
 import { Link, useHistory } from 'react-router-dom'
+import { useState } from 'react'
 
 const SocialMediaRoleRequest1 = () => {
     let history = useHistory();
 
-    const handleSubmit = (evt) => {
+    const [month, setmonth] = useState();
+
+    const handleSubmit = async (evt) => {
         evt.preventDefault();
+        
+        const resp = await fetch(`http://127.0.0.1:5000/author-role/6?month=${month}`)
+        let data = await resp.json()
         history.push({
             pathname: '/result',
-            state: {
-              tableData: [
-                  {
-                    'title1': 'aa1',
-                    'title2': 'bb1',
-                  },
-                  {
-                    'title1': 'aa2',
-                    'title2': 'bb2',
-                  },
-              ],
-            },
+            state: data,
           });
     }
-
     return (
       <div>
         <div className="ButtonLink BackButton"><Link to="/">Back</Link></div>
@@ -31,7 +25,7 @@ const SocialMediaRoleRequest1 = () => {
                     <form>
                         <div className="FormRow">
                             <span>Month:</span>
-                            <input type="text"/>
+                            <input type="text" onChange={e => setmonth(e.target.value)}/>
                         </div>
                     </form>
                 </div>

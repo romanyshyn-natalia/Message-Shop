@@ -1,24 +1,22 @@
 import { Link, useHistory } from 'react-router-dom'
+import { useState } from 'react'
 
 const SocialMediaRoleRequest1 = () => {
     let history = useHistory();
 
-    const handleSubmit = (evt) => {
+    const [customer, setcustomer] = useState();
+    const [author, setauthor] = useState();
+    const [start, setstart] = useState();
+    const [end, setend] = useState();
+
+    const handleSubmit = async (evt) => {
         evt.preventDefault();
+        
+        const resp = await fetch(`http://127.0.0.1:5000/customer-role/5?customer=${customer}&author=${author}&start=${start}&end=${end}`)
+        let data = await resp.json()
         history.push({
             pathname: '/result',
-            state: {
-              tableData: [
-                  {
-                    'title1': 'aa1',
-                    'title2': 'bb1',
-                  },
-                  {
-                    'title1': 'aa2',
-                    'title2': 'bb2',
-                  },
-              ],
-            },
+            state: data,
           });
     }
 
@@ -31,19 +29,19 @@ const SocialMediaRoleRequest1 = () => {
                     <form>
                         <div className="FormRow">
                             <span>Customer:</span>
-                            <input type="text"/>
+                            <input type="text" onChange={e => setcustomer(e.target.value)}/>
                         </div>
                         <div className="FormRow">
                             <span>Author:</span>
-                            <input type="text"/>
+                            <input type="text" onChange={e => setauthor(e.target.value)}/>
                         </div>
                         <div className="FormRow">
                             <span>Start date:</span>
-                            <input type="text"/>
+                            <input type="text" onChange={e => setstart(e.target.value)}/>
                         </div>
                         <div className="FormRow">
                             <span>End date:</span>
-                            <input type="text"/>
+                            <input type="text" onChange={e => setend(e.target.value)}/>
                         </div>
                     </form>
                 </div>
