@@ -70,7 +70,8 @@ CREATE TABLE IF NOT EXISTS PromosDay (
 	start_date DATE NOT NULL DEFAULT CURRENT_DATE,
 	author_id INTEGER NOT NULL
 		REFERENCES Author(author_id)
-		ON DELETE CASCADE
+		ON DELETE CASCADE,
+	amount INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS PromosWeek (
@@ -78,7 +79,8 @@ CREATE TABLE IF NOT EXISTS PromosWeek (
 	start_date DATE NOT NULL DEFAULT CURRENT_DATE,
 	author_id INTEGER NOT NULL
 		REFERENCES Author(author_id)
-		ON DELETE CASCADE
+		ON DELETE CASCADE,
+	amount INTEGER NOT NULL
 );
 
 INSERT INTO Customer(name)
@@ -227,29 +229,29 @@ VALUES
 	(7, 10, '2020-09-10', '2020-09-15'),
 	(7, 9, '2019-08-10', '2019-09-05');
 
-INSERT INTO PromosDay(start_date, author_id) VALUES
-	('2018-05-19', 5),
-	('2020-02-10', 2),
-	('2021-04-26', 8),
-	('2021-04-27', 7),
-	('2021-04-28', 9),
-	('2021-04-28', 1),
-	('2021-04-29', 4),
-	('2021-04-30', 3),
-	('2021-05-01', 6),
-	('2020-05-02', 10);
+INSERT INTO PromosDay(start_date, author_id, amount) VALUES
+	('2018-05-19', 5, 40),
+	('2020-02-10', 2, 50),
+	('2021-04-26', 8, 40),
+	('2021-04-27', 7, 90),
+	('2021-04-28', 9, 80),
+	('2021-04-28', 1, 10),
+	('2021-04-29', 4, 17),
+	('2021-04-30', 3, 25),
+	('2021-05-01', 6, 33),
+	('2020-05-02', 10, 65);
 	
-INSERT INTO PromosWeek(start_date, author_id) VALUES
-	('2018-06-18', 4),
-	('2020-09-28', 3),
-	('2021-04-26', 6),
-	('2021-05-12', 10),
-	('2021-05-28', 1),
-	('2021-06-03', 9),
-	('2021-06-11', 7),
-	('2021-06-19', 8),
-	('2021-06-28', 2),
-	('2020-07-12', 5);
+INSERT INTO PromosWeek(start_date, author_id, amount) VALUES
+	('2018-06-18', 4, 0),
+	('2020-09-28', 3, 78),
+	('2021-04-26', 6, 67),
+	('2021-05-12', 10, 55),
+	('2021-05-28', 1, 34),
+	('2021-06-03', 9, 25),
+	('2021-06-11', 7, 60),
+	('2021-06-19', 8, 40),
+	('2021-06-28', 2, 30),
+	('2020-07-12', 5, 20);
 
 CREATE INDEX author_id_index ON Author(author_id);
 CREATE INDEX customer_id_index ON Customer(customer_id);
