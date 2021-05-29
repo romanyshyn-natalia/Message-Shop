@@ -124,6 +124,22 @@ SELECT
 EXECUTE getEvents('Anya', 'Linda', '2000-05-09', '2021-09-10');
 deallocate getEvents;
 
+-- 9
+SELECT Social_network.name, COUNT(Article.article_id) AS article_number
+  FROM Article
+  JOIN Author
+  ON Article.author_group_id = Author.author_group_id
+  JOIN Social_network
+  ON Article.network_id = Social_network.network_id
+  JOIN (SELECT AuthorGroup.author_group_id, COUNT(AuthorGroup.author_group_id) AS author_amount
+        FROM Author
+        JOIN AuthorGroup
+        ON Author.author_group_id = AuthorGroup.author_group_id
+        GROUP BY AuthorGroup.author_group_id) AS AuthorAmount
+  ON Article.author_group_id = AuthorAmount.author_group_id
+  WHERE Author.name = 'Bill' AND date between '2018-03-01'::date AND ('2021-05-30'::date + '1 day'::interval) AND author_amount >= 1
+  GROUP BY Social_network.network_id;
+
 -- 10.	для покупця С та кожного стилю, у якому вiн замовляв повiдомлення, знайти скiльки замовлень за вказаний перiод
 -- (з дати F по дату T) отримали 50% знижку;
 
