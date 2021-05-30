@@ -285,9 +285,6 @@ SELECT * FROM Access_token;
 SELECT * FROM PromosDay;
 SELECT * FROM PromosWeek;
 
-SELECT *
-    FROM Author, AuthorGroup
-    WHERE AuthorGroup.author_group_id = Author.author_group_id;
 
 SELECT *
     FROM Author, Author_AuthorGroup
