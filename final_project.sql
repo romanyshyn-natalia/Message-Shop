@@ -10,10 +10,7 @@ CREATE TABLE IF NOT EXISTS AuthorGroup (
 
 CREATE TABLE IF NOT EXISTS Author (
 	author_id SERIAL PRIMARY KEY,
-	name VARCHAR(100),
-	author_group_id INTEGER
-		REFERENCES AuthorGroup(author_group_id)
-		ON DELETE SET NULL
+	name VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS Social_network (
@@ -83,6 +80,13 @@ CREATE TABLE IF NOT EXISTS PromosWeek (
 	amount INTEGER NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS Author_AuthorGroup (
+	author_id INTEGER REFERENCES Author(author_id),
+	author_group_id INTEGER
+		REFERENCES AuthorGroup(author_group_id)
+		ON DELETE SET NULL
+);
+
 INSERT INTO Customer(name)
 VALUES
 	('Sofia'),
@@ -109,19 +113,30 @@ VALUES
 	('Orange Group'),
 	('Cyan Group');
 
-INSERT INTO Author(name, author_group_id)
+INSERT INTO Author(name)
 VALUES
-	('Bill', 1),
-	('Mary', 6),
-	('Tom', 2),
-	('Pol', 1),
-	('Andrew', NULL),
-	('Sabina', NULL),
-	('Linda', 9),
-	('Herman', 8),
-	('Scott', 8),
-	('Tony', 8);
-	
+	('Bill'),
+	('Mary'),
+	('Tom'),
+	('Pol'),
+	('Andrew'),
+	('Sabina'),
+	('Linda'),
+	('Herman'),
+	('Scott'),
+	('Tony');
+
+INSERT INTO Author_AuthorGroup(author_id, author_group_id)
+VALUES
+	(1, 1),
+	(2, 6),
+	(3, 2),
+	(4, 1),
+	(5, 9),
+	(6, 8),
+	(7, 8),
+	(8, 8);
+
 INSERT INTO Social_network(name)
 VALUES
 	('Instagram'),
@@ -274,7 +289,11 @@ SELECT * FROM PromosWeek;
 SELECT *
     FROM Author, AuthorGroup
     WHERE AuthorGroup.author_group_id = Author.author_group_id;
-	
+
+SELECT *
+    FROM Author, Author_AuthorGroup
+    WHERE Author_AuthorGroup.author_id = Author.author_id;
+
 SELECT *
     FROM Post, Author
     WHERE Post.author_id = Author.author_id;
@@ -310,6 +329,3 @@ SELECT *
 SELECT *
     FROM PromosWeek, Author
     WHERE PromosWeek.author_id = Author.author_id;
-
-
-
