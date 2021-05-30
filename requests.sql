@@ -1,4 +1,6 @@
---1
+--1. Для автора A знайти усiх покупцiв, якi замовляли у нього повiдомлення хоча б N разiв за
+-- вказаний перiод (з дати F по дату T);
+
 SELECT Customer.name FROM Customer
   JOIN POST
   ON Customer.customer_id = POST.customer_id
@@ -7,9 +9,11 @@ SELECT Customer.name FROM Customer
   WHERE Author.name = 'Pol' AND
  	date between '2018-04-01'::date AND ('2021-05-30'::date + '1 day'::interval)
   GROUP BY Customer.customer_id
-  HAVING COUNT(Customer.customer_id) >= 1; -- N = 1
+  HAVING COUNT(Customer.customer_id) >= 1;
 
---2
+--2. Для покупця С знайти усiх авторiв, у яких вiн замовляв повiдомлення чи статтi за вказаний
+-- перiод (з дати F по дату T)
+
 SELECT DISTINCT name FROM (
 SELECT Author.name
   FROM Post
@@ -29,7 +33,9 @@ SELECT Author.name
     ON Author.author_id = Author_AuthorGroup.author_id
   WHERE Customer.name = 'Anya' AND date between '2018-03-01'::date AND ('2021-05-30'::date + '1 day'::interval)) AS Auth;
 
---3
+--3. Знайти усiх авторiв, якi отримували замовлення вiд щонайменше N рiзних покупцiв за
+-- вказаний перiод (з дати F по дату T)
+
 SELECT Author.name, COUNT(DISTINCT Post_cust.customer_id) AS number_of_distinct_customers
 FROM (
   SELECT Customer.customer_id, Post.author_id
@@ -43,16 +49,32 @@ ON Author.author_id = Post_cust.author_id
 GROUP BY Author.author_id
 HAVING COUNT(DISTINCT Post_cust.customer_id) >= 1;
 
---4
-SELECT name, COUNT(Customer.customer_id) AS number_of_orders
-FROM Customer
-INNER JOIN Post
-ON Customer.customer_id = Post.customer_id
-WHERE date between '2018-05-30'::date AND ('2020-05-30'::date + '1 day'::interval)
-GROUP BY Customer.customer_id
-HAVING COUNT(Customer.customer_id) >= 1;
+--4. Знайти усiх покупцiв, якi зробили хоча б N замовлень за вказаний перiод (з дати F по дату T);
 
---5
+SELECT DISTINCT name FROM (
+SELECT Customer.name
+  FROM Customer
+  INNER JOIN Post
+    ON Customer.customer_id = Post.customer_id
+  WHERE date between '2018-05-30'::date AND ('2021-05-30'::date + '1 day'::interval)
+  GROUP BY Customer.customer_id
+  HAVING COUNT(Customer.customer_id) >= 1
+UNION
+SELECT Customer.name
+  FROM Article
+  JOIN Customer
+    ON Article.customer_id = Customer.customer_id
+  JOIN Author_AuthorGroup
+    ON Article.author_group_id = Author_AuthorGroup.author_group_id
+  JOIN Author
+    ON Author.author_id = Author_AuthorGroup.author_id
+  WHERE date between '2018-05-30'::date AND ('2021-05-30'::date + '1 day'::interval)
+  GROUP BY Customer.customer_id
+  HAVING COUNT(Customer.customer_id) >= 1) AS Cus;
+
+--5. Для покупця С знайти усi соцiальнi мережi, для яких вiн зробив хоча б N замовлень за
+-- вказаний перiод (з дати F по дату T)
+
 SELECT Social_network.name, COUNT(Post_cust.customer_id) AS number_of_orders
 FROM (
   SELECT Customer.customer_id, Post.network_id
@@ -67,7 +89,9 @@ ON Social_network.network_id = Post_cust.network_id
 GROUP BY Social_network.network_id
 HAVING COUNT(Post_cust.customer_id) >= 1;
 
--- 6.	для автора А знайти усi облiковi записи у соцiальних мережах, до яких вiн мав доступ протягом вказаного перiоду (з дати F по дату T);
+-- 6. Для автора А знайти усi облiковi записи у соцiальних мережах, до яких вiн мав доступ протягом
+-- вказаного перiоду (з дати F по дату T);
+
 SELECT customer_id FROM
 Access_token INNER JOIN
 (SELECT author_id from Author WHERE name='Scott') as A
@@ -75,7 +99,9 @@ ON A.author_id=Access_token.author_id
 AND Access_token.status=true
 OR Access_token.given between '2019-08-11'::date and '2019-09-07';
 
--- 7.	для покупця С знайти усiх авторiв, яким вiн надав доступ до хоча б одного облiкового запису у соцiальнiй мережi, а потiм позбавив його цього доступу;
+-- 7. Для покупця С знайти усiх авторiв, яким вiн надав доступ до хоча б одного облiкового запису у
+-- соцiальнiй мережi, а потiм позбавив його цього доступу;
+
 SELECT Author.name as authors
 FROM Access_token
 INNER JOIN (SELECT customer_id,name FROM Customer WHERE name='Dmytro') AS C
@@ -83,7 +109,7 @@ ON Access_token.customer_id=C.customer_id
 INNER JOIN Author ON Author.author_id=Access_token.author_id
 WHERE Access_token.status=false;
 
--- 8.	знайти усi спiльнi подiї для автора A та покупця С за вказаний перiод (з дати F по дату T);
+-- 8. Знайти усi спiльнi подiї для автора A та покупця С за вказаний перiод (з дати F по дату T);
 -- Події
 -- покупець замовляє у автора повiдомлення деякого стилю у соцiальнiй мережi;
 -- покупець надає автору доступ до свого облiкогово запису у соцiальнiй мережi;
@@ -124,7 +150,9 @@ SELECT
 EXECUTE getEvents('Anya', 'Linda', '2000-05-09', '2021-09-10');
 deallocate getEvents;
 
--- 9
+-- 9. Для автора A та кожної соцiальної мережi, у якiй вiн писав статтю, знайти скiльки разiв за
+-- вказаний перiод (з дати F по дату T) вiн писав її у групi з щонайменше N авторiв
+
 SELECT Social_network.name, COUNT(Article.article_id) AS article_number
   FROM Article
   JOIN (SELECT name, author_group_id 
@@ -142,7 +170,7 @@ SELECT Social_network.name, COUNT(Article.article_id) AS article_number
   WHERE AG.name = 'Bill' AND date between '2018-03-01'::date AND ('2021-05-30'::date + '1 day'::interval) AND author_amount >= 1
   GROUP BY Social_network.network_id;
 
--- 10.	для покупця С та кожного стилю, у якому вiн замовляв повiдомлення, знайти скiльки замовлень за вказаний перiод
+-- 10. Для покупця С та кожного стилю, у якому вiн замовляв повiдомлення, знайти скiльки замовлень за вказаний перiод
 -- (з дати F по дату T) отримали 50% знижку;
 
 PREPARE getDiscountedPosts (VARCHAR(50), date, date) AS
@@ -166,12 +194,15 @@ ON W.style_id=D.style_id;
 EXECUTE getDiscountedPosts('Oleksandr', '2000-05-09', '2021-09-10');
 deallocate getDiscountedPosts;
 
---11
+--11. Знайти сумарну кiлькiсть замовлень по мiсяцях
+
 SELECT COUNT(*), DATE_TRUNC('month', date) AS  month 
 FROM Post
 GROUP BY DATE_TRUNC('month', date);
 
---12
+--12. Вивести соцiальнi мережi у порядку спадання середньої кiлькостi повiдомлень по усiх стилях,
+-- що були написанi автором A за вказаний перiод (з дати F по дату T)
+
 SELECT Social_network.name
   FROM Post
   JOIN PostStyles
