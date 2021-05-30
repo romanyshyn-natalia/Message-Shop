@@ -29,7 +29,7 @@ const SocialMediaRoleRequest1 = () => {
                 <div className="FormContainer">
                     <form>
                         <div className="FormRow">
-                            <span>Customer:</span>
+                            <span>Customer id:</span>
                             <input type="text" onChange={e => setcustomer(e.target.value)}/>
                         </div>
                         <div className="FormRow">

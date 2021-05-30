@@ -11,6 +11,7 @@ const SelectRole = () => {
                     <div className="ButtonLink"><Link to="/author-role">Author</Link></div>
                     <div className="ButtonLink"><Link to="/customer-role">Customer</Link></div>
                     <div className="ButtonLink"><Link to="/social-media-role">Social media</Link></div>
+                    <div className="ButtonLink"><Link to="/additional-role">Additional</Link></div>
                 </div>
             </div>
       </div>

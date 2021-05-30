@@ -4,6 +4,7 @@ import SelectRole from '../../modules/SelectRole'
 import AuthorRole from '../../modules/AuthorRole'
 import CustomerRole from '../../modules/CustomerRole'
 import SocialMediaRole from '../../modules/SocialMediaRole'
+import AdditionalRole from '../../modules/AdditionalRole'
 
 import SocialMediaRoleRequest1 from '../../modules/SocialMediaRole/SocialMediaRoleRequest1'
 import AuthorRoleRequest1 from '../../modules/AuthorRole/AuthorRoleRequest1'
@@ -77,6 +78,9 @@ const MainApp = () => {
                 </Route>
                 <Route path="/author-role">
                     <AuthorRole />
+                </Route>
+                <Route path="/additional-role">
+                    <AdditionalRole />
                 </Route>
                 <Route path="/select-role">
                     <SelectRole />

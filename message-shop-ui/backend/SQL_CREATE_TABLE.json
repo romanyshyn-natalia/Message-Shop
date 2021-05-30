@@ -1,0 +1,13 @@
+{
+  "table1": "CREATE TABLE IF NOT EXISTS Customer (\n    customer_id SERIAL PRIMARY KEY,\n    name VARCHAR(50) NOT NULL);",
+  "table2": "CREATE TABLE IF NOT EXISTS AuthorGroup (\n\tauthor_group_id SERIAL PRIMARY KEY,\n\tname VARCHAR(1000) NOT NULL);",
+  "table3": "CREATE TABLE IF NOT EXISTS Author (\n\tauthor_id SERIAL PRIMARY KEY,\n\tname VARCHAR(100)\n);",
+  "table4": "CREATE TABLE IF NOT EXISTS Social_network (\n    network_id SERIAL PRIMARY KEY,\n    name VARCHAR(50) NOT NULL);",
+  "table5": "CREATE TABLE IF NOT EXISTS PostStyles (\n\tstyle_id SERIAL PRIMARY KEY,\t\n\tstyle_name VARCHAR(25) NOT NULL);",
+  "table6": "CREATE TABLE IF NOT EXISTS Post (\n\tpost_id SERIAL PRIMARY KEY,\n\tstyle_id INTEGER,\n\tauthor_id INTEGER NOT NULL\n\t\tREFERENCES Author(author_id)\n\t\tON DELETE CASCADE,\n\tcustomer_id INTEGER NOT NULL,\n\tnetwork_id INTEGER NOT NULL,\n\tdescription VARCHAR(1000) NOT NULL,\n\ttext VARCHAR(1000),\n\tdate DATE NOT NULL DEFAULT CURRENT_DATE,\n\tupdate DATE DEFAULT CURRENT_DATE);",
+  "table7": "CREATE TABLE IF NOT EXISTS Article (\n    article_id SERIAL PRIMARY KEY,\n    customer_id INTEGER NOT NULL,\n    author_group_id INTEGER NOT NULL\n\t  REFERENCES AuthorGroup(author_group_id)\n\t  ON DELETE CASCADE,\n    network_id INTEGER NOT NULL,\n\theader VARCHAR(100) NOT NULL,\n\tdescription VARCHAR(10000) NOT NULL,\n\ttext VARCHAR(10000),\n\tdate DATE NOT NULL DEFAULT CURRENT_DATE,\n\tupdate DATE DEFAULT CURRENT_DATE);",
+  "table8": "CREATE TABLE IF NOT EXISTS Access_token (\n    token_id SERIAL PRIMARY KEY,\n    customer_id INTEGER NOT NULL\n\t\tREFERENCES Customer(customer_id)\n\t\tON DELETE CASCADE,\n    author_id INTEGER NOT NULL,\n    status BOOLEAN DEFAULT FALSE,\n\tgiven DATE NOT NULL DEFAULT CURRENT_DATE,\n\tterminated DATE DEFAULT NULL);",
+  "table9": "CREATE TABLE IF NOT EXISTS PromosDay (\n\tpromo_day_id SERIAL PRIMARY KEY,\n\tstart_date DATE NOT NULL DEFAULT CURRENT_DATE,\n\tauthor_id INTEGER NOT NULL\n\t\tREFERENCES Author(author_id)\n\t\tON DELETE CASCADE,\n\tamount INTEGER NOT NULL);",
+  "table10": "CREATE TABLE IF NOT EXISTS PromosWeek (\n\tpromo_week_id SERIAL PRIMARY KEY,\n\tstart_date DATE NOT NULL DEFAULT CURRENT_DATE,\n\tauthor_id INTEGER NOT NULL\n\t\tREFERENCES Author(author_id)\n\t\tON DELETE CASCADE,\n\tamount INTEGER NOT NULL);",
+  "table11": "CREATE TABLE IF NOT EXISTS Author_AuthorGroup (\n\tauthor_id INTEGER REFERENCES Author(author_id),\n\tauthor_group_id INTEGER REFERENCES AuthorGroup(author_group_id),\n\tPRIMARY KEY (author_id, author_group_id)\n);"
+}

@@ -4,13 +4,14 @@ import { useState } from 'react'
 const SocialMediaRoleRequest1 = () => {
     let history = useHistory();
 
+    const [author, setauthor] = useState();
     const [start, setstart] = useState();
     const [end, setend] = useState();
 
     const handleSubmit = async (evt) => {
         evt.preventDefault();
         
-        const resp = await fetch(`http://127.0.0.1:5000/author-role/3?start=${start}&end=${end}`)
+        const resp = await fetch(`http://127.0.0.1:5000/author-role/3?author=${author}&start=${start}&end=${end}`)
         let data = await resp.json()
         history.push({
             pathname: '/result',
@@ -26,6 +27,10 @@ const SocialMediaRoleRequest1 = () => {
                 <h3>Now fill all required fields.</h3>
                 <div className="FormContainer">
                     <form>
+                        <div className="FormRow">
+                            <span>Author:</span>
+                            <input type="text" onChange={e => setauthor(e.target.value)}/>
+                        </div>
                         <div className="FormRow">
                             <span>Start date:</span>
                             <input type="text" onChange={e => setstart(e.target.value)}/>
