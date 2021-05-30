@@ -82,9 +82,8 @@ CREATE TABLE IF NOT EXISTS PromosWeek (
 
 CREATE TABLE IF NOT EXISTS Author_AuthorGroup (
 	author_id INTEGER REFERENCES Author(author_id),
-	author_group_id INTEGER
-		REFERENCES AuthorGroup(author_group_id)
-		ON DELETE SET NULL
+	author_group_id INTEGER REFERENCES AuthorGroup(author_group_id),
+	PRIMARY KEY (author_id, author_group_id)
 );
 
 INSERT INTO Customer(name)
