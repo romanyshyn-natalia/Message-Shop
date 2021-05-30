@@ -74,20 +74,34 @@ SELECT Customer.name
 
 --5. Для покупця С знайти усi соцiальнi мережi, для яких вiн зробив хоча б N замовлень за
 -- вказаний перiод (з дати F по дату T)
-
-SELECT Social_network.name, COUNT(Post_cust.customer_id) AS number_of_orders
+SELECT article_orders.network_id, article_orders.name, post_count+article_count as orders_count FROM
+(SELECT Social_network.name, Social_network.network_id, COUNT(Post_cust.customer_id) as post_count
 FROM (
   SELECT Customer.customer_id, Post.network_id
   FROM Customer
   INNER JOIN Post
   ON Customer.customer_id = Post.customer_id
-  WHERE date between '2018-05-30'::date AND ('2020-05-30'::date + '1 day'::interval)
+  WHERE date between '2001-05-30'::date AND ('2021-12-12'::date + '1 day'::interval)
     AND Customer.customer_id = 4
 ) AS Post_cust
-INNER JOIN Social_network
+RIGHT JOIN Social_network
 ON Social_network.network_id = Post_cust.network_id
-GROUP BY Social_network.network_id
-HAVING COUNT(Post_cust.customer_id) >= 1;
+GROUP BY Social_network.network_id) AS post_orders
+JOIN
+(SELECT Social_network.name, Social_network.network_id, COUNT(Article_cust.customer_id) as article_count
+FROM (
+  SELECT Customer.customer_id, Article.network_id
+  FROM Customer
+  INNER JOIN Article
+  ON Customer.customer_id = Article.customer_id
+  WHERE date between '2001-05-30'::date AND ('2021-12-12'::date + '1 day'::interval)
+    AND Customer.customer_id = 4
+) AS Article_cust
+RIGHT JOIN Social_network
+ON Social_network.network_id = Article_cust.network_id
+GROUP BY Social_network.network_id) AS article_orders
+ON article_orders.network_id=post_orders.network_id
+WHERE article_orders.article_count+post_orders.post_count >= 1;
 
 -- 6. Для автора А знайти усi облiковi записи у соцiальних мережах, до яких вiн мав доступ протягом
 -- вказаного перiоду (з дати F по дату T);
